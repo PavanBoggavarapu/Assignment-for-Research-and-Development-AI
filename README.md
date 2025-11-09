@@ -1,81 +1,97 @@
 Parametric Curve Fitting for XY Data
 
-This project performs parametric curve fitting to estimate the best values of θ (theta), M, and X for a set of custom parametric equations, using observed data from xy_data.csv.
-The objective is to find parameters that minimize the L1 (Manhattan) distance between the model curve and the observed data points.
+This project focuses on fitting a custom parametric curve to a set of XY data points taken from xy_data.csv.
+The idea is simple: we try to find the values of θ (theta), M, and X that make our parametric curve match the observed data as closely as possible.
+To measure how well the curve matches the data, we use the L1 (Manhattan) distance.
 
-✅ Parametric Equations
+📌 Model Description
 
-The model being fitted is:
+The curve we are fitting is defined by the following equations:
 
-x(t) = t * cos(theta) 
-       - e^(M * |t|) * sin(0.3 * t) * sin(theta) 
+x(t) = t * cos(theta)
+       - e^(M * |t|) * sin(0.3 * t) * sin(theta)
        + X
 
-y(t) = 42 
-       + t * sin(theta) 
+y(t) = 42
+       + t * sin(theta)
        + e^(M * |t|) * sin(0.3 * t) * cos(theta)
 
-✅ Requirements
 
-You need Python 3 with the following libraries:
+These equations combine linear components with a small oscillatory exponential signal, which makes the optimization a bit challenging — and interesting.
+
+📁 Requirements
+
+This project uses Python 3 and the following packages:
 
 numpy
+
 pandas
+
 scipy
+
 matplotlib
 
-
-Install them using:
+You can install everything with:
 
 pip install numpy pandas scipy matplotlib
 
-✅ How to Run
+🚀 How to Run
 
-Place these files in the same folder:
+Keep this notebook: Research_Assignment.ipynb,
+and the dataset: xy_data.csv, in the same location.
 
-Research_Assignment.ipynb
+Open the notebook in Jupyter Notebook or VS Code.
 
-xy_data.csv
+Run the cells from top to bottom.
 
-Open the notebook in Jupyter or VS Code.
+The script will:
 
-Run all cells.
+Read the data
 
-The notebook will:
+Perform several optimization steps
 
-Load the data
-
-Perform multi-stage optimization
+Display the progress
 
 Print the final parameter values
 
-Save the result plot as curve_fitting_result.png
+Save a plot named curve_fitting_result.png
 
-✅ Optimization Process
+🔍 How the Optimization Works
 
-The script uses a robust two-stage optimization strategy:
+To get a reliable result, the script doesn’t rely on a single method.
+Instead, it combines two approaches:
 
-Local optimization (L-BFGS-B)
+1. Local Optimization (L-BFGS-B)
 
-Run from multiple starting points
+Runs from multiple starting points to explore different regions of the parameter space.
 
-Efficiently narrows down good parameter regions
+2. Global Optimization (Differential Evolution)
 
-Global optimization (Differential Evolution)
+Ensures we don’t get stuck in a local minimum and helps refine the best solution.
 
-Confirms and refines the best solution
+Together, these steps make the fitting both accurate and stable.
 
-Avoids local minima traps
+✅ Final Results
 
-✅ Final Output
-
-The algorithm converged to:
+After running the full pipeline, the algorithm converged to these values:
 
 theta = 29.999445 degrees
 M     = 0.03000120
 X     = 54.998518
 
 
-Final mean L1 distance: 0.013358
+The mean L1 distance came out to:
 
-These results indicate an excellent fit, and the values closely match the expected underlying true parameters (30°, 0.03, 55) used during data generation.
+0.013358
+
+
+This is an excellent fit, and the values are extremely close to the expected true parameters (≈ 30°, 0.03, and 55).
+This confirms that the script successfully recovered the original model used to generate the data.
+
+📊 Output
+
+The notebook generates:
+
+curve_fitting_result.png – showing the fitted curve overlayed with the real data
+
+Console logs showing optimization steps and final parameters
